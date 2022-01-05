@@ -46,3 +46,23 @@
     }
   }
 }
+
+.buttonLoadPosts {
+  width: fit-content;
+
+  font-size: 1.125;
+  font-weight: 600;
+  color: var(--pink-500);
+  background-color: transparent;
+
+  border: none;
+  margin-top: 4rem;
+
+  cursor: pointer;
+
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}

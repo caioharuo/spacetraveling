@@ -11,6 +11,7 @@ import commonStyles from '../styles/common.module.scss';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import Header from '../components/Header';
+import { useState } from 'react';
 
 interface Post {
   uid?: string;
@@ -32,6 +33,17 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps) {
+  const [posts, setPosts] = useState(postsPagination.results);
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
+
+  async function handleLoadMorePosts() {
+    await fetch(nextPage)
+      .then(res => res.json())
+      .then(loadedPosts => setPosts([...posts, ...loadedPosts.results]));
+
+    setNextPage(null);
+  }
+
   return (
     <div className={commonStyles.container}>
       <Head>
@@ -39,7 +51,7 @@ export default function Home({ postsPagination }: HomeProps) {
       </Head>
       <Header />
       <main className={styles.posts}>
-        {postsPagination.results.map(post => (
+        {posts.map(post => (
           <Link key={post.uid} href={`/post/${post.uid}`}>
             <a>
               <strong>{post.data.title}</strong>
@@ -47,7 +59,9 @@ export default function Home({ postsPagination }: HomeProps) {
               <div>
                 <time>
                   <img src="/images/calendar.svg" alt="ícone de calendário" />
-                  {post.first_publication_date}
+                  {format(new Date(post.first_publication_date), 'PP', {
+                    locale: ptBR,
+                  })}
                 </time>
                 <span>
                   <img src="/images/user.svg" alt="ícone de usuário" />
@@ -57,6 +71,17 @@ export default function Home({ postsPagination }: HomeProps) {
             </a>
           </Link>
         ))}
+
+        {nextPage !== null ? (
+          <button
+            onClick={handleLoadMorePosts}
+            className={styles.buttonLoadPosts}
+          >
+            Carregar mais posts
+          </button>
+        ) : (
+          ''
+        )}
       </main>
     </div>
   );
@@ -68,20 +93,14 @@ export const getStaticProps: GetStaticProps = async () => {
     [Prismic.predicates.at('document.type', 'posts')],
     {
       fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
-      pageSize: 20,
+      pageSize: 2,
     }
   );
 
   const posts = postsResponse.results.map(post => {
     return {
       uid: post.uid,
-      first_publication_date: format(
-        new Date(post.last_publication_date),
-        'PP',
-        {
-          locale: ptBR,
-        }
-      ),
+      first_publication_date: post.first_publication_date,
       data: {
         title: post.data.title,
         subtitle: post.data.subtitle,
