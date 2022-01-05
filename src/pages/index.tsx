@@ -45,44 +45,46 @@ export default function Home({ postsPagination }: HomeProps) {
   }
 
   return (
-    <div className={commonStyles.container}>
-      <Head>
-        <title>Home | spacetraveling</title>
-      </Head>
-      <Header />
-      <main className={styles.posts}>
-        {posts.map(post => (
-          <Link key={post.uid} href={`/post/${post.uid}`}>
-            <a>
-              <strong>{post.data.title}</strong>
-              <p>{post.data.subtitle}</p>
-              <div>
-                <time>
-                  <img src="/images/calendar.svg" alt="ícone de calendário" />
-                  {format(new Date(post.first_publication_date), 'PP', {
-                    locale: ptBR,
-                  })}
-                </time>
-                <span>
-                  <img src="/images/user.svg" alt="ícone de usuário" />
-                  {post.data.author}
-                </span>
-              </div>
-            </a>
-          </Link>
-        ))}
+    <div className={styles.container}>
+      <div className={commonStyles.container}>
+        <Head>
+          <title>Home | spacetraveling</title>
+        </Head>
+        <Header />
+        <main className={styles.posts}>
+          {posts.map(post => (
+            <Link key={post.uid} href={`/post/${post.uid}`}>
+              <a>
+                <strong>{post.data.title}</strong>
+                <p>{post.data.subtitle}</p>
+                <div>
+                  <time>
+                    <img src="/images/calendar.svg" alt="ícone de calendário" />
+                    {format(new Date(post.first_publication_date), 'PP', {
+                      locale: ptBR,
+                    })}
+                  </time>
+                  <span>
+                    <img src="/images/user.svg" alt="ícone de usuário" />
+                    {post.data.author}
+                  </span>
+                </div>
+              </a>
+            </Link>
+          ))}
 
-        {nextPage !== null ? (
-          <button
-            onClick={handleLoadMorePosts}
-            className={styles.buttonLoadPosts}
-          >
-            Carregar mais posts
-          </button>
-        ) : (
-          ''
-        )}
-      </main>
+          {nextPage !== null ? (
+            <button
+              onClick={handleLoadMorePosts}
+              className={styles.buttonLoadPosts}
+            >
+              Carregar mais posts
+            </button>
+          ) : (
+            ''
+          )}
+        </main>
+      </div>
     </div>
   );
 }
