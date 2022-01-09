@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -8,10 +9,10 @@ import Prismic from '@prismicio/client';
 import styles from './home.module.scss';
 import commonStyles from '../styles/common.module.scss';
 
+import { FiCalendar, FiUser } from 'react-icons/fi';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import Header from '../components/Header';
-import { useState } from 'react';
 
 interface Post {
   uid?: string;
@@ -39,9 +40,10 @@ export default function Home({ postsPagination }: HomeProps) {
   async function handleLoadMorePosts() {
     await fetch(nextPage)
       .then(res => res.json())
-      .then(loadedPosts => setPosts([...posts, ...loadedPosts.results]));
-
-    setNextPage(null);
+      .then(loadedPosts => {
+        setPosts([...posts, ...loadedPosts.results]);
+        setNextPage(loadedPosts.next_page);
+      });
   }
 
   return (
@@ -59,13 +61,13 @@ export default function Home({ postsPagination }: HomeProps) {
                 <p>{post.data.subtitle}</p>
                 <div>
                   <time>
-                    <img src="/images/calendar.svg" alt="ícone de calendário" />
+                    <FiCalendar />
                     {format(new Date(post.first_publication_date), 'PP', {
                       locale: ptBR,
                     })}
                   </time>
                   <span>
-                    <img src="/images/user.svg" alt="ícone de usuário" />
+                    <FiUser />
                     {post.data.author}
                   </span>
                 </div>
@@ -95,7 +97,7 @@ export const getStaticProps: GetStaticProps = async () => {
     [Prismic.predicates.at('document.type', 'posts')],
     {
       fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
-      pageSize: 2,
+      pageSize: 3,
     }
   );
 

@@ -1,8 +1,6 @@
 .container {
-  padding: 2.5rem 0 5rem 0;
-
   .posts {
-    margin-top: 1.5rem;
+    margin-top: 4rem;
 
     display: flex;
     flex-direction: column;
@@ -41,6 +39,11 @@
 
           color: var(--gray-500);
           font-size: 0.875rem;
+
+          svg {
+            width: 20px;
+            height: 20px;
+          }
         }
       }
 
