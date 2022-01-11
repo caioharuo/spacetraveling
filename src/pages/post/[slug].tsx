@@ -14,6 +14,7 @@ import { ptBR } from 'date-fns/locale';
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import { useRouter } from 'next/router';
+import { UtterancesComments } from '../../components/UtterancesComments';
 
 interface Post {
   first_publication_date: string | null;
@@ -112,6 +113,8 @@ export default function Post({ post }: PostProps) {
           </article>
         </main>
       </div>
+
+      <UtterancesComments />
     </>
   );
 }
