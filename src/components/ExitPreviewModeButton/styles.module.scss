@@ -1,0 +1,19 @@
+.link {
+  background: var(--gray-100);
+  color: var(--gray-900) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.125rem 0;
+
+  text-decoration: none;
+
+  transition: filter 0.2s;
+
+  font-size: 1.125rem;
+  font-weight: 600;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}

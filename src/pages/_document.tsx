@@ -1,4 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
+import { repoName } from '../../prismicConfiguration';
 
 export default class MyDocument extends Document {
   render() {
@@ -9,6 +10,11 @@ export default class MyDocument extends Document {
           <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
+          />
+          <script
+            async
+            defer
+            src={`//static.cdn.prismic.io/prismic.js?repo=${repoName}&new=true`}
           />
         </Head>
         <body>
