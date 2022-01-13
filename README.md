@@ -6,8 +6,9 @@
     <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#project-">Project</a>  |  
     <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#layout-">Layout</a>  |  
     <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#tools-%EF%B8%8F">Tools</a>  |  
-    <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#features-">Features</a>   |  
-    <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#how-to-execute-">How to execute</a>     
+    <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#features-">Features</a>  |  
+    <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#how-to-execute-">How to execute</a>  |  
+    <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#license-">License</a>          
   </div>
 </div> 
 
@@ -58,3 +59,8 @@ This project was developed using the following technologies:
 - Run the application with `yarn dev`
 - Access [`localhost:3000`](http://localhost:3000/) in your browser
 
+## License 📄
+
+This project is under the MIT license. See the [LICENSE](https://github.com/caioharuo/spacetraveling/blob/master/LICENSE) file for more details.
+
+Developed with 💜 by [Caio Hatai](https://www.linkedin.com/in/caio-haruo/) and [Rocketseat](https://www.linkedin.com/school/rocketseat/).
