@@ -8,7 +8,7 @@
     <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#tools-%EF%B8%8F">Tools</a>  |  
     <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#features-">Features</a>  |  
     <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#how-to-execute-">How to execute</a>  |  
-    <a href="https://github.com/caioharuo/spacetraveling/new/master?readme=1#license-">License</a>          
+    <a href="https://github.com/caioharuo/spacetraveling/blob/master/README.md#license-">License</a>          
   </div>
 </div> 
 
