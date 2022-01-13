@@ -1,5 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
+
 import Header from '../../components/Header';
 
 import Prismic from '@prismicio/client';
@@ -19,6 +21,7 @@ import { ExitPreviewModeButton } from '../../components/ExitPreviewModeButton';
 
 interface Post {
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -32,6 +35,18 @@ interface Post {
       }[];
     }[];
   };
+  previousPost: {
+    uid: string;
+    data: {
+      title: string;
+    };
+  } | null;
+  nextPost: {
+    uid: string;
+    data: {
+      title: string;
+    };
+  } | null;
 }
 
 interface PostProps {
@@ -77,6 +92,7 @@ export default function Post({ post, preview }: PostProps) {
         alt="banner"
         className={styles.banner}
       />
+
       <div className={commonStyles.container}>
         <main className={styles.container}>
           <article className={styles.post}>
@@ -98,6 +114,15 @@ export default function Post({ post, preview }: PostProps) {
               </span>
             </div>
 
+            {post.last_publication_date && (
+              <span className={styles.editedAt}>
+                * editado em{' '}
+                {format(new Date(post.last_publication_date), 'PPPp', {
+                  locale: ptBR,
+                })}
+              </span>
+            )}
+
             {post.data.content.map((content, index) => (
               <section
                 className={styles.postContent}
@@ -114,6 +139,30 @@ export default function Post({ post, preview }: PostProps) {
             ))}
           </article>
         </main>
+
+        <div className={styles.divider} />
+
+        <nav className={styles.neighborPosts}>
+          {post.previousPost !== null && (
+            <div>
+              <span>{post.previousPost.data.title}</span>
+              <Link
+                href={`http://localhost:3000/post/${post.previousPost.uid}`}
+              >
+                <a>Post anterior</a>
+              </Link>
+            </div>
+          )}
+
+          {post.nextPost !== null && (
+            <div>
+              <span>{post.nextPost.data.title}</span>
+              <Link href={`http://localhost:3000/post/${post.nextPost.uid}`}>
+                <a>Próximo post</a>
+              </Link>
+            </div>
+          )}
+        </nav>
 
         <div className={styles.commentsContainer}>
           <UtterancesComments />
@@ -159,8 +208,40 @@ export const getStaticProps: GetStaticProps = async ({
     ref: previewData?.ref ?? null,
   });
 
+  const previousResponse = await prismic.query(
+    [Prismic.predicates.at('document.type', 'posts')],
+    {
+      fetch: ['post.title'],
+      after: response.id,
+      orderings: '[document.first_publication_date desc]',
+      pageSize: 1,
+      ref: previewData?.ref ?? null,
+    }
+  );
+
+  const nextResponse = await prismic.query(
+    [Prismic.predicates.at('document.type', 'posts')],
+    {
+      fetch: ['post.title'],
+      after: response.id,
+      orderings: '[document.first_publication_date]',
+      pageSize: 1,
+      ref: previewData?.ref ?? null,
+    }
+  );
+
+  if (!response) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
   const post = {
     first_publication_date: response?.first_publication_date || null,
+    last_publication_date: response?.last_publication_date || null,
     uid: response.uid,
 
     data: {
@@ -177,6 +258,20 @@ export const getStaticProps: GetStaticProps = async ({
         };
       }),
     },
+
+    previousPost: previousResponse.results.length
+      ? {
+          uid: previousResponse.results[0].uid,
+          data: { title: previousResponse.results[0].data.title },
+        }
+      : null,
+    nextPost: nextResponse.results.length
+      ? {
+          uid: nextResponse.results[0].uid,
+          data: { title: nextResponse.results[0].data.title },
+        }
+      : null,
+    preview,
   };
 
   return {
@@ -184,5 +279,6 @@ export const getStaticProps: GetStaticProps = async ({
       post,
       preview,
     },
+    revalidate: 60 * 30, // 30 minutes
   };
 };
